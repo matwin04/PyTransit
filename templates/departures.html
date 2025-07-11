@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Departures for {{ stop_id }}</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 2rem;
+        }
+        h1 {
+            margin-bottom: 1rem;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #ccc;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Departures for {{ stop_id }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Trip ID</th>
+                <th>Time</th>
+                <th>Headsign</th>
+                <th>Route</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in departures %}
+            <tr style="background-color: #{{ d.route_color }}; color: #{{ d.route_text_color }}">
+                <td>{{ d.trip_id }}</td>
+                <td>{{ d.formatted_time }}</td>
+                <td>{{ d.trip_headsign }}</td>
+                <td>{{ d.route_short_name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Routes</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 2rem;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #ccc;
+            text-align: left;
+        }
+        tr:hover {
+            filter: brightness(0.9);
+        }
+    </style>
+</head>
+<body>
+    <h1>GTFS Routes</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Route ID</th>
+                <th>Agency ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for route in routes.itertuples() %}
+            <tr style="background-color: #{{ route.route_color }}; color: #{{ route.route_text_color }};">
+                <td>{{ route.route_id }}</td>
+                <td>{{ route.agency_id }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!-- templates/stations.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Stations</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 2rem;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #ccc;
+            text-align: left;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        a {
+            color: #0077cc;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>GTFS Stations</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Stop ID</th>
+                <th>Name</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Departures</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stop in stations.itertuples() %}
+            <tr>
+                <td>{{ stop.stop_id }}</td>
+                <td>{{ stop.stop_name }}</td>
+                <td>{{ stop.stop_lat }}</td>
+                <td>{{ stop.stop_lon }}</td>
+                <td><a href="/departures/{{ stop.stop_id }}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
