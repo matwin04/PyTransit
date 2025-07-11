@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Departures for {{ stop_id }}</title>
+    <title>Departures for {{ stop_name }}</title>
     <style>
         body {
             font-family: sans-serif;
@@ -23,7 +23,9 @@
     </style>
 </head>
 <body>
-    <h1>Departures for {{ stop_id }}</h1>
+    {% include 'navbar.html' %}
+
+    <h1>Departures for <b>{{ stop_name }}</b></h1>
     <table>
         <thead>
             <tr>
