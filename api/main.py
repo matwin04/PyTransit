@@ -1,6 +1,5 @@
 from flask import Flask, render_template, jsonify
 import gtfs_kit as gk
-import pandas as pd
 import os
 from datetime import datetime
 
