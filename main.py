@@ -9,6 +9,14 @@ app = Flask(__name__)
 FEED_PATH = "data/OC.zip"
 feed = gk.read_feed(FEED_PATH, dist_units="km")
 
+def timestring_to_seconds(timestr):
+    h, m, s = map(int, timestr.split(":"))
+    return h * 3600 + m * 60 + s
+
+def format_am_pm(sec):
+    hour = (sec // 3600) % 24
+    minute = (sec % 3600) // 60
+    return datetime(2000, 1, 1, hour, minute).strftime("%I:%M %p")
 @app.route("/")
 def home():
     return "<h2>Welcome to the OC GTFS Viewer</h2><p>Go to /stations or /departures/&lt;stop_id&gt;</p>"
@@ -25,24 +33,26 @@ def routes():
 
 @app.route("/departures/<stop_id>")
 def departures(stop_id):
-    now = datetime.now().time()
+    now = datetime.now()
+    now_seconds = now.hour * 3600 + now.minute * 60 + now.second
 
     stop_times = feed.stop_times[feed.stop_times["stop_id"] == stop_id]
     stop_times = stop_times.merge(feed.trips, on="trip_id")
     stop_times = stop_times.merge(feed.routes, on="route_id", how="left")
 
-    # Filter out past times
-    stop_times["parsed_time"] = stop_times["departure_time"].apply(lambda t: datetime.strptime(t, "%H:%M:%S").time())
-    upcoming = stop_times[stop_times["parsed_time"] >= now]
+    stop_times["seconds"] = stop_times["departure_time"].apply(timestring_to_seconds)
+    upcoming = stop_times[stop_times["seconds"] >= now_seconds].copy()
+    upcoming = upcoming.sort_values("seconds")
 
-    # Sort by time
-    upcoming = upcoming.sort_values("parsed_time")
-
-    # Format time to 12-hour format
-    upcoming["formatted_time"] = upcoming["parsed_time"].apply(lambda t: t.strftime("%I:%M %p"))
+    upcoming["formatted_time"] = upcoming["seconds"].apply(format_am_pm)
 
     departures = upcoming[["trip_id", "formatted_time", "trip_headsign", "route_short_name", "route_color", "route_text_color"]].to_dict(orient="records")
 
-    return render_template("departures.html", departures=departures, stop_id=stop_id)
+    # 🔍 Lookup stop name from stops.txt
+    stop_row = feed.stops[feed.stops["stop_id"] == stop_id]
+    stop_name = stop_row["stop_name"].values[0] if not stop_row.empty else stop_id
+
+    return render_template("departures.html", departures=departures, stop_id=stop_id, stop_name=stop_name)
+    
 if __name__ == "__main__":
     app.run(debug=True)
