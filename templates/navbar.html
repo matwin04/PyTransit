@@ -1,8 +1,20 @@
-<!-- templates/navbar.html -->
-<nav style="background-color: #333; padding: 0.5rem;">
-  <ul style="display: flex; list-style: none; gap: 1rem; margin: 0; padding: 0; color: white;">
-    <li><a href="/" style="color: white; text-decoration: none;">Home</a></li>
-    <li><a href="/stations" style="color: white; text-decoration: none;">Stations</a></li>
-    <li><a href="/routes" style="color: white; text-decoration: none;">Routes</a></li>
-  </ul>
+<nav style="background-color: #333; color: white; padding: 10px; display: flex; justify-content: space-between;">
+    <div>
+        <a href="/" style="color:white; margin-right: 15px;">Home</a>
+        <a href="/stations" style="color:white; margin-right: 15px;">Stations</a>
+        <a href="/routes" style="color:white;">Routes</a>
+    </div>
+    <div>
+        <span id="clock" style="color:white; font-family: monospace;"></span>
+    </div>
 </nav>
+
+<script>
+function updateClock() {
+    const now = new Date();
+    const options = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    document.getElementById('clock').textContent = now.toLocaleTimeString([], options);
+}
+setInterval(updateClock, 1000);
+updateClock();
+</script>
