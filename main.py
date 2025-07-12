@@ -19,7 +19,7 @@ def format_am_pm(sec):
     return datetime(2000, 1, 1, hour, minute).strftime("%I:%M %p")
 @app.route("/")
 def home():
-    return "<h2>Welcome to the OC GTFS Viewer</h2><p>Go to /stations or /departures/&lt;stop_id&gt;</p>"
+    return render_template("index.html")
 
 @app.route("/stations")
 def stations():
