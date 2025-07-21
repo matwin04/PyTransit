@@ -1,10 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Trips</title>
+    <title>Routes</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 2rem;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        th, td {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #ccc;
+            text-align: left;
+        }
+        tr:hover {
+            filter: brightness(0.9);
+        }
+    </style>
 </head>
 <body>
-
+    {% include 'navbar.html' %}
+    <h1>GTFS Routes</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Route ID</th>
+                <th>Agency ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for trip in trips.itertuples() %}
+            
+                <td>{{ trip.trip_id }}</td>
+                <td>{{ trip.route_id}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>

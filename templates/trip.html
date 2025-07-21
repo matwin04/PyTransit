@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trip {{ trip_id }}</title>
+  <link href="/static/style.css" rel="stylesheet">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <h1>Trip: {{ route_short_name }} to {{ trip_headsign }}</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Sequence</th>
+            <th>Stop Name</th>
+            <th>Time</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for stop in stops.itertuples() %}
+        <tr>
+            <td>{{ stop.stop_sequence }}</td>
+            <td>{{ stop.stop_name }}</td>
+            <td>{{ stop.formatted_time }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </body>
+</html>

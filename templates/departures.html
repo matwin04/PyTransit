@@ -3,24 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Departures for {{ stop_name }}</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            padding: 2rem;
-        }
-        h1 {
-            margin-bottom: 1rem;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            padding: 0.5rem 1rem;
-            border-bottom: 1px solid #ccc;
-            text-align: left;
-        }
-    </style>
+    <link href="/static/style.css" rel="stylesheet">
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -33,6 +16,7 @@
                 <th>Time</th>
                 <th>Headsign</th>
                 <th>Route</th>
+                <th>View Train</th>
             </tr>
         </thead>
         <tbody>
@@ -42,6 +26,9 @@
                 <td>{{ d.formatted_time }}</td>
                 <td>{{ d.trip_headsign }}</td>
                 <td>{{ d.route_short_name }}</td>
+                <td>
+                    <a href="/trips/{{d.trip_id}}">View Train</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

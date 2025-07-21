@@ -30,7 +30,37 @@ def stations():
 def routes():
     routes = feed.routes[["route_id","agency_id","route_short_name","route_long_name","route_type","route_url","route_color","route_text_color"]]
     return render_template("routes.html",routes=routes)
+@app.route("/trips")
+def trips():
+    trips = feed.trips[["trip_id","route_id"]]
+    return render_template("trips.html",trips=trips)
 
+@app.route("/trips/<trip_id>")
+def gettrain(trip_id):
+    # Filter stop_times for the given trip
+    stops = feed.stop_times[feed.stop_times["trip_id"] == trip_id].copy()
+    if stops.empty:
+        return f"No trip found with ID {trip_id}", 404
+
+    # Merge with stop details
+    stops = stops.merge(feed.stops, on="stop_id")
+    stops["arrival_sec"] = stops["arrival_time"].apply(timestring_to_seconds)
+    stops["formatted_time"] = stops["arrival_sec"].apply(format_am_pm)
+
+    # Sort by stop_sequence to preserve order
+    stops = stops.sort_values("stop_sequence")
+
+    trip_info = feed.trips[feed.trips["trip_id"] == trip_id].iloc[0]
+    route_info = feed.routes[feed.routes["route_id"] == trip_info["route_id"]].iloc[0]
+
+    return render_template(
+        "trip.html",
+        trip_id=trip_id,
+        route_short_name=route_info["route_short_name"],
+        trip_headsign=trip_info["trip_headsign"],
+        stops=stops[["stop_sequence", "stop_name", "formatted_time"]]
+    )
+    
 @app.route("/departures/<stop_id>")
 def departures(stop_id):
     now = datetime.now()
